@@ -1,0 +1,187 @@
+/* Body and background settings for color, text aligning, and padding */
+body{
+	background-color: black;
+	color: white;
+	text-align: center;
+	margin: 20px;
+	padding: 20px;
+	}
+
+/* Header styling for color */
+header{
+	background-color: black;
+}
+
+/* Heading styling for alignment, font size and color*/
+h1{
+	text-align: center; 
+	font-size: 50px; 
+	color:white;
+}
+
+h2{
+	text-align: center;
+}
+
+/* Paragraph styling */
+p{
+	color: white;
+	margin: 10px 0
+}
+
+/* Link styling for color and hovers */
+a{
+	color: lightblue;
+	text-decoration: none;
+}
+
+a:hover{
+	text-decoration: underline;
+}
+
+/* Image centering */
+img {
+	display: block; 
+	margin-left: auto; 
+	margin-right: auto;
+	
+}
+
+/* Head styling color*/
+head{
+	color: white;
+}
+
+
+/* Button styling for color, padding, size, and alignment */
+.button{
+	padding: 5px 15px; 
+	background-color: whitesmoke; 
+	color: black; 
+	font-size: 12px;
+	display: inline-block;
+	border-radius: 5px;
+	transition: background-color 0.3s, color 0.3s;
+	text-align: center;}
+
+
+.button:hover{
+	background-color: gray;
+	color: white;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+/* Container for centering content */
+.container{
+	text-align: center;
+	margin: 20px 0;
+}
+
+/* arranging images side by side and their*/
+.image-container{
+	display: flex;
+	align-items: center;
+	position: relative;
+	width: 100%;
+	flex-wrap: wrap;
+}
+
+.image-button-pair{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-wrap: wrap;
+	
+}
+
+.image-button-pair:first-child{
+	margin-right: auto;
+}
+
+.image-button-pair:nth-child(2){
+	margin-left: 1px;
+}
+
+.image-button-pair:last-child{
+	margin-left:auto;
+}
+
+/*Image size for buttons*/
+.image-button-pair img{
+	height: 250px;
+	width: 250px;
+}
+
+/*Adjust spacing and button styles*/
+.image-button-pair a.button{
+	padding: 5px 15px;
+}
+
+/* home button padding*/
+.home-button{
+	padding: 10px 25px;
+}
+
+/* link color */
+.comms a{
+	color:magenta;
+}
+
+/*Image size*/
+.responsive-img{
+	width: 50%;
+	
+}
+.responsive-i{
+	width: 50%;
+	height: auto;
+}
+
+/*Styling for description class*/
+.description{
+	font-size: 150%;
+}
+
+/* center the div for communication*/
+.comms{
+	text-align: center;
+}
+
+.user-list{
+	list-style-type: none;
+	display: inline-block;
+	margin-left: -45px;
+}
+
+/*Profile image style*/
+.profile-image{
+	width: 100px;
+	height: 200px;
+	width: 25%;
+}
+
+/*responsive image styles*/
+.responsive-imgage{
+	width: 50%;
+	max-width: 400px;
+	height: auto;
+}
+.ri{
+	width:25%;
+	height:100px;
+	width:25%;
+}
+
+/*Arranges the list in study groups*/
+.course-list{
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+.pay{
+	width:400px; 
+	height:400px;
+	width:50%;
+}
