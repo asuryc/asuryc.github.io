@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Settings - Subscription Saver</title>
+  <title>Add Subscription - Subscription Saver</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -24,21 +24,19 @@
     </aside>
 
     <main class="main-content">
-      <h2>Account Information</h2>
-      <form class="account-form">
-        <label for="name">Full Name:</label><br />
-        <input type="text" id="name" name="name" placeholder="John Doe"><br /><br />
+      <h2>Add a New Subscription</h2>
 
-        <label for="email">Email Address:</label><br />
-        <input type="email" id="email" name="email" placeholder="john@example.com"><br /><br />
+      <form class="add-subscription-form">
+        <label for="subscription-name">Subscription Name:</label><br />
+        <input type="text" id="subscription-name" name="subscription-name" placeholder="e.g., Netflix"><br /><br />
 
-        <label for="password">Password:</label><br />
-        <input type="password" id="password" name="password" placeholder="••••••••"><br /><br />
+        <label for="subscription-cost">Monthly Price ($):</label><br />
+        <input type="number" id="subscription-cost" name="subscription-cost" placeholder="e.g., 15.99" step="0.01"><br /><br />
 
-        <label for="nsub">New Subscription:</label><br />
-        <input type="nsub" id="nsub" name="nsub" placeholder=""><br /><br />
+        <label for="billing-date">Next Billing Date:</label><br />
+        <input type="date" id="billing-date" name="billing-date"><br /><br />
 
-        <button type="submit">Update Info</button>
+        <button type="submit">Add Subscription</button>
       </form>
     </main>
   </div>
