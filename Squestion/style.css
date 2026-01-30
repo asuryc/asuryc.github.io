@@ -1,0 +1,742 @@
+/* ========================================
+   Valentine's Day Theme - CSS Variables
+   ======================================== */
+:root {
+    --primary-pink: #ff9ec1;
+    --secondary-pink: #ffb6d9;
+    --light-pink: #ffe5f0;
+    --accent-pink: #ff6b9d;
+    --dark-pink: #d4578f;
+    --rose-red: #ff5e7e;
+    --bg-gradient-start: #fff0f6;
+    --bg-gradient-end: #ffe0ef;
+    --text-dark: #5a1e3d;
+    --text-light: #8b4566;
+    --white: #ffffff;
+    --shadow-pink: rgba(255, 107, 157, 0.3);
+}
+
+/* ========================================
+   Global Styles
+   ======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    position: relative;
+    color: var(--text-dark);
+}
+
+/* Add a subtle pattern overlay */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(255, 182, 217, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 158, 193, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(255, 94, 126, 0.05) 0%, transparent 30%);
+    pointer-events: none;
+}
+
+/* ========================================
+   Container & Content Box
+   ======================================== */
+.container {
+    position: relative;
+    z-index: 10;
+    padding: 2rem;
+    max-width: 700px;
+    width: 100%;
+}
+
+.content-box {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    padding: 1.5rem 2rem;
+    box-shadow: 
+        0 20px 60px var(--shadow-pink),
+        0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+    text-align: center;
+    position: relative;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   Typography
+   ======================================== */
+.main-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+    color: var(--dark-pink);
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(212, 87, 143, 0.2);
+    animation: titlePulse 2s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: var(--text-light);
+    margin-top: 1rem;
+    font-style: italic;
+}
+
+/* ========================================
+   Image Styling
+   ======================================== */
+.image-container {
+    position: relative;
+    margin: 1rem auto;
+    max-width: 400px;
+    animation: imageFloat 3s ease-in-out infinite;
+}
+
+@keyframes imageFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.main-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 215px;
+    object-fit: contain;
+}
+
+.image-border {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 3px solid var(--primary-pink);
+    border-radius: 25px;
+    z-index: 1;
+    animation: borderRotate 20s linear infinite;
+}
+
+@keyframes borderRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* ========================================
+   Buttons
+   ======================================== */
+.button-container {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 1.2rem 2.5rem;
+    font-size: 1.3rem;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-text {
+    position: relative;
+    z-index: 2;
+}
+
+.btn-hearts {
+    position: relative;
+    z-index: 2;
+    font-size: 1.5rem;
+}
+
+.btn-yes {
+    background: linear-gradient(135deg, var(--accent-pink) 0%, var(--rose-red) 100%);
+    color: var(--white);
+    box-shadow: 0 10px 30px rgba(255, 94, 126, 0.4);
+    animation: btnPulse 2s ease-in-out infinite;
+}
+
+.btn-yes:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(255, 94, 126, 0.5);
+}
+
+@keyframes btnPulse {
+    0%, 100% {
+        box-shadow: 0 10px 30px rgba(255, 94, 126, 0.4);
+    }
+    50% {
+        box-shadow: 0 10px 40px rgba(255, 94, 126, 0.6);
+    }
+}
+
+.btn-no {
+    background: linear-gradient(135deg, var(--secondary-pink) 0%, var(--primary-pink) 100%);
+    color: var(--text-dark);
+    box-shadow: 0 10px 30px rgba(255, 158, 193, 0.3);
+}
+
+.btn-no:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(255, 158, 193, 0.4);
+}
+
+.btn-retry {
+    background: linear-gradient(135deg, var(--accent-pink) 0%, var(--dark-pink) 100%);
+    color: var(--white);
+    box-shadow: 0 10px 30px rgba(212, 87, 143, 0.4);
+}
+
+.btn-retry:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(212, 87, 143, 0.5);
+}
+
+/* ========================================
+   Floating Hearts Animation
+   ======================================== */
+.hearts-container,
+.celebration-hearts,
+.broken-hearts {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.heart {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    opacity: 0.7;
+    animation: floatUp 10s ease-in infinite;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 48px;
+    background: var(--primary-pink);
+    border-radius: 50px 50px 0 0;
+}
+
+.heart::before {
+    left: 50%;
+    transform: translateX(-50%) rotate(-45deg);
+    transform-origin: 0 100%;
+}
+
+.heart::after {
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    transform-origin: 100% 100%;
+}
+
+@keyframes floatUp {
+    0% {
+        opacity: 0;
+        transform: translateY(100vh) scale(0);
+    }
+    10% {
+        opacity: 0.7;
+    }
+    90% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100px) scale(1);
+    }
+}
+
+/* Position hearts randomly */
+.heart:nth-child(1) {
+    left: 10%;
+    animation-delay: 0s;
+    animation-duration: 12s;
+}
+
+.heart:nth-child(2) {
+    left: 25%;
+    animation-delay: 2s;
+    animation-duration: 10s;
+}
+
+.heart:nth-child(3) {
+    left: 40%;
+    animation-delay: 4s;
+    animation-duration: 14s;
+}
+
+.heart:nth-child(4) {
+    left: 60%;
+    animation-delay: 1s;
+    animation-duration: 11s;
+}
+
+.heart:nth-child(5) {
+    left: 75%;
+    animation-delay: 3s;
+    animation-duration: 13s;
+}
+
+.heart:nth-child(6) {
+    left: 90%;
+    animation-delay: 5s;
+    animation-duration: 9s;
+}
+
+/* ========================================
+   Celebration Hearts (Yes Page)
+   ======================================== */
+.heart.celebrate {
+    animation: celebrateFloat 3s ease-out infinite;
+}
+
+@keyframes celebrateFloat {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(0) rotate(0deg);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-50vh) scale(1) rotate(180deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100vh) scale(0.5) rotate(360deg);
+    }
+}
+
+.celebration-hearts .heart:nth-child(1) { left: 5%; animation-delay: 0s; }
+.celebration-hearts .heart:nth-child(2) { left: 15%; animation-delay: 0.3s; }
+.celebration-hearts .heart:nth-child(3) { left: 30%; animation-delay: 0.6s; }
+.celebration-hearts .heart:nth-child(4) { left: 45%; animation-delay: 0.9s; }
+.celebration-hearts .heart:nth-child(5) { left: 55%; animation-delay: 1.2s; }
+.celebration-hearts .heart:nth-child(6) { left: 70%; animation-delay: 1.5s; }
+.celebration-hearts .heart:nth-child(7) { left: 85%; animation-delay: 1.8s; }
+.celebration-hearts .heart:nth-child(8) { left: 20%; animation-delay: 2.1s; }
+.celebration-hearts .heart:nth-child(9) { left: 65%; animation-delay: 2.4s; }
+.celebration-hearts .heart:nth-child(10) { left: 95%; animation-delay: 2.7s; }
+
+/* ========================================
+   Flower Decorations
+   ======================================== */
+.flower {
+    position: fixed;
+    font-size: 4rem;
+    z-index: 5;
+    animation: flowerSway 4s ease-in-out infinite;
+}
+
+@keyframes flowerSway {
+    0%, 100% {
+        transform: rotate(-5deg);
+    }
+    50% {
+        transform: rotate(5deg);
+    }
+}
+
+.flower-top-left {
+    top: 5%;
+    left: 5%;
+}
+
+.flower-top-right {
+    top: 5%;
+    right: 5%;
+}
+
+.flower-bottom-left {
+    bottom: 5%;
+    left: 5%;
+}
+
+.flower-bottom-right {
+    bottom: 5%;
+    right: 5%;
+}
+
+.flower.pulse {
+    font-size: 6.7rem;
+    animation: flowerPulse 2s ease-in-out infinite;
+}
+
+@keyframes flowerPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+.flower.wilted {
+    opacity: 0.4;
+    filter: grayscale(50%);
+    animation: wiltedDroop 3s ease-in-out infinite;
+}
+
+@keyframes wiltedDroop {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(10deg);
+    }
+}
+
+/* ========================================
+   Yes Page - Celebration Styles
+   ======================================== */
+.yes-page {
+    background: linear-gradient(135deg, #fff5f9 0%, #ffe8f2 50%, #ffd1e3 100%);
+}
+
+.celebration-box {
+    animation: celebrationPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes celebrationPop {
+    0% {
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+.celebration-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 4rem;
+    color: var(--rose-red);
+    margin-bottom: 1rem;
+    animation: celebrationGlow 2s ease-in-out infinite;
+}
+
+@keyframes celebrationGlow {
+    0%, 100% {
+        text-shadow: 0 0 20px rgba(255, 94, 126, 0.6);
+    }
+    50% {
+        text-shadow: 0 0 40px rgba(255, 94, 126, 0.9);
+    }
+}
+
+.celebration-subtitle {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.8rem;
+    color: var(--accent-pink);
+    margin-bottom: 2rem;
+}
+
+.love-message {
+    margin: 2rem 0;
+}
+
+.message-text {
+    font-size: 1.4rem;
+    color: var(--text-dark);
+    margin: 1rem 0;
+    line-height: 1.6;
+}
+
+.decorative-hearts {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.decorative-heart {
+    font-size: 4rem;
+    display: inline-block;
+    animation: heartBounce 1s ease-in-out infinite;
+}
+
+.decorative-heart:nth-child(1) { animation-delay: 0s; }
+.decorative-heart:nth-child(2) { animation-delay: 0.2s; }
+.decorative-heart:nth-child(3) { animation-delay: 0.4s; }
+.decorative-heart:nth-child(4) { animation-delay: 0.6s; }
+.decorative-heart:nth-child(5) { animation-delay: 0.8s; }
+
+@keyframes heartBounce {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-10px) scale(1.2);
+    }
+}
+
+.celebration-image {
+    animation: imageGlow 2s ease-in-out infinite;
+}
+
+@keyframes imageGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 20px rgba(255, 94, 126, 0.5));
+    }
+    50% {
+        filter: drop-shadow(0 0 40px rgba(255, 94, 126, 0.8));
+    }
+}
+
+.celebration-border {
+    border-color: var(--rose-red);
+    animation: borderGlow 2s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 94, 126, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(255, 94, 126, 0.8);
+    }
+}
+
+/* ========================================
+   No Page - Wrong Choice Styles
+   ======================================== */
+.no-page {
+    background: linear-gradient(135deg, #fef0f4 0%, #fde4ed 100%);
+}
+
+.wrong-choice-box {
+    animation: shakeNo 0.5s ease-in-out;
+}
+
+@keyframes shakeNo {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-10px);
+    }
+    75% {
+        transform: translateX(10px);
+    }
+}
+
+.wrong-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 3.5rem;
+    color: var(--dark-pink);
+    margin-bottom: 1rem;
+}
+
+.wrong-subtitle {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.6rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+}
+
+.sad-message {
+    margin: 2rem 0;
+}
+
+.hint-text {
+    font-size: 1.1rem;
+    color: var(--accent-pink);
+    margin-top: 2rem;
+    font-style: italic;
+}
+
+/* Broken hearts animation */
+.broken-heart {
+    position: absolute;
+    font-size: 3rem;
+    animation: fallDown 3s ease-in infinite;
+}
+
+.broken-hearts .broken-heart:nth-child(1) {
+    left: 30%;
+    animation-delay: 0s;
+}
+
+.broken-hearts .broken-heart:nth-child(2) {
+    left: 50%;
+    animation-delay: 1s;
+}
+
+.broken-hearts .broken-heart:nth-child(3) {
+    left: 70%;
+    animation-delay: 2s;
+}
+
+@keyframes fallDown {
+    0% {
+        top: -10%;
+        opacity: 0;
+        transform: rotate(0deg);
+    }
+    10% {
+        opacity: 0.5;
+    }
+    90% {
+        opacity: 0.5;
+    }
+    100% {
+        top: 110%;
+        opacity: 0;
+        transform: rotate(180deg);
+    }
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+@media (max-width: 768px) {
+    .main-title,
+    .celebration-title {
+        font-size: 1rem;
+    }
+
+    .wrong-title {
+        font-size: 2.5rem;
+    }
+
+    .celebration-subtitle,
+    .wrong-subtitle {
+        font-size: 1.3rem;
+    }
+
+    .content-box {
+        padding: 2rem 1.5rem;
+    }
+
+    .btn {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+    }
+
+    .button-container {
+        gap: 1rem;
+    }
+
+    .flower {
+        font-size: 2.5rem;
+    }
+
+    .message-text {
+        font-size: 1.1rem;
+    }
+
+    .decorative-heart {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-title,
+    .celebration-title,
+    .wrong-title {
+        font-size: 2rem;
+    }
+
+    .celebration-subtitle,
+    .wrong-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .flower {
+        font-size: 2rem;
+    }
+
+.image-container {
+    max-width: 90%;  /* Uses 90% of available space on mobile */
+}
+
+
+@media (min-width: 768px) {
+    .image-container {
+        max-width: 400px;  /* Limited to 400px on larger screens */
+    }
+}
