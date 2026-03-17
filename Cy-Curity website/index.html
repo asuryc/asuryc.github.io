@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cyber Cy-Curity | Cybersecurity Consulting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ══════════════════════════════════════════════
+       Y2K HACKER OVERLAY — animations & interactivity
+    ══════════════════════════════════════════════ */
+
+    /* Page scanlines */
+    #scanlines {
+      position: fixed; inset: 0; z-index: 500; pointer-events: none;
+      background: repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 4px);
+    }
+
+    /* Scroll progress */
+    #prog {
+      position: fixed; top: 68px; left: 0; height: 2px; z-index: 200;
+      background: linear-gradient(90deg,#2E86FF,#4B9BFF);
+      box-shadow: 0 0 8px rgba(46,134,255,.6);
+      width: 0%; transition: width .08s linear;
+    }
+
+    /* Side data stream */
+    .dstream {
+      position: fixed; right: 14px; top: 50%; transform: translateY(-50%);
+      z-index: 50; pointer-events: none;
+      display: flex; flex-direction: column; gap: 5px; align-items: center;
+    }
+    .dstream span {
+      font-family: 'JetBrains Mono',monospace; font-size: .55rem;
+      color: rgba(46,134,255,.22);
+      animation: dfade 2.5s ease-in-out infinite;
+    }
+    .dstream span:nth-child(2n) { animation-delay: .5s; }
+    .dstream span:nth-child(3n) { animation-delay: 1s; }
+    .dstream span:nth-child(4n) { animation-delay: 1.5s; }
+    @keyframes dfade { 0%,100%{opacity:.12} 50%{opacity:.55} }
+    @media(max-width:960px){.dstream{display:none}}
+
+    /* Nav additions */
+    .nav-status {
+      font-family: 'JetBrains Mono',monospace;
+      font-size: .60rem; .nav-status { color: #4B9BFF; }
+      letter-spacing: .14em; display: flex; align-items: center; gap: 7px;
+    }
+    .nav-pulse {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #4ADE80; box-shadow: 0 0 8px #4ADE80;
+      animation: np 2s ease-in-out infinite;
+    }
+    @keyframes np { 0%,100%{box-shadow:0 0 4px #4ADE80;opacity:1} 50%{box-shadow:0 0 14px #4ADE80;opacity:.5} }
+    #nclock { font-family: 'JetBrains Mono',monospace; font-size: .60rem; color: #4B9BFF; }
+
+    /* Hero matrix canvas */
+    #hmat { position:absolute; inset:0; z-index:0; opacity:.09; pointer-events:none; }
+
+    /* HUD corners */
+    .hud { position:absolute; width:18px; height:18px; pointer-events:none; z-index:3; }
+    .hud svg { width:100%; height:100%; }
+    .htl{top:10px;left:10px} .htr{top:10px;right:10px;transform:scaleX(-1)}
+    .hbl{bottom:10px;left:10px;transform:scaleY(-1)} .hbr{bottom:10px;right:10px;transform:scale(-1,-1)}
+
+    /* Eyebrow typewriter */
+    #etext {
+      overflow:hidden; white-space:nowrap; display:inline;
+      border-right: 2px solid #2E86FF;
+      animation: tcur .8s step-end 2.2s infinite;
+    }
+    @keyframes tcur { 0%,100%{border-color:#2E86FF} 50%{border-color:transparent} }
+
+    /* Glitch headline */
+    .glitch { position:relative; display:inline-block; }
+    .glitch::before,.glitch::after {
+      content:attr(data-t); position:absolute; top:0; left:0;
+      width:100%; height:100%;
+      font:inherit; letter-spacing:inherit; line-height:inherit;
+      background: linear-gradient(100deg,#2E86FF 0%,#7DB8FF 60%,#99CCFF 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .glitch::before { animation: ga 6s infinite step-start; }
+    .glitch::after  { animation: gb 6s infinite step-start; }
+    @keyframes ga {
+      0%,91%,100%{opacity:0;clip-path:none;transform:none}
+      92%{opacity:.7;clip-path:polygon(0 18%,100% 18%,100% 30%,0 30%);transform:translateX(3px)}
+      93%{opacity:.4;clip-path:polygon(0 60%,100% 60%,100% 72%,0 72%);transform:translateX(-2px)}
+      94%{opacity:0}
+    }
+    @keyframes gb {
+      0%,93%,100%{opacity:0;clip-path:none;transform:none}
+      94%{opacity:.6;clip-path:polygon(0 42%,100% 42%,100% 55%,0 55%);transform:translateX(-4px)}
+      95%{opacity:.3;clip-path:polygon(0 76%,100% 76%,100% 85%,0 85%);transform:translateX(2px)}
+      96%{opacity:0}
+    }
+
+    /* Terminal lines animate in */
+    .tl { opacity:0; transition: opacity .1s; }
+    .tl.on { opacity:1; }
+
+    /* Hex grid behind services */
+    .services { position:relative; overflow:hidden; }
+    #hxcv { position:absolute; inset:0; z-index:0; opacity:.055; pointer-events:none; }
+    .services .container { position:relative; z-index:1; }
+
+    /* Card sweep on hover */
+    .service-card { overflow:hidden; }
+    .service-card::after {
+      content:''; position:absolute; left:0; right:0; height:2px;
+      background: linear-gradient(90deg,transparent,#2E86FF,transparent);
+      top:-2px; opacity:0;
+    }
+    .service-card:hover::after { animation: csweep .55s ease forwards; }
+    @keyframes csweep { 0%{top:0;opacity:.8} 100%{top:105%;opacity:0} }
+
+    /* Process connector dot */
+    .pcon { position:absolute; top:35px; left:12.5%; right:12.5%; height:1px; z-index:0; }
+    .pline { position:absolute; inset:0; background:linear-gradient(90deg,#2E86FF,#4B9BFF); opacity:.28; }
+    .pdot {
+      position:absolute; top:50%; transform:translateY(-50%);
+      width:7px; height:7px; border-radius:50%;
+      background:#2E86FF; box-shadow:0 0 10px #2E86FF,0 0 20px rgba(46,134,255,.5);
+      animation: travel 4s linear infinite;
+    }
+    @keyframes travel { 0%{left:0%;opacity:0} 5%{opacity:1} 95%{opacity:1} 100%{left:100%;opacity:0} }
+
+    /* Breach counter widget */
+    .breach {
+      background: var(--bg-card); border:1px solid rgba(46,134,255,.30);
+      border-radius: var(--r12); padding:18px 20px; margin-top:24px;
+      font-family:'JetBrains Mono',monospace; position:relative; overflow:hidden;
+    }
+    .breach::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background: linear-gradient(90deg,#2E86FF,#4ADE80,#2E86FF);
+      background-size:200% 100%; animation: sbar 2s linear infinite;
+    }
+    @keyframes sbar { 0%{background-position:0%} 100%{background-position:200%} }
+    .blabel { font-size:.58rem; color:rgba(255,255,255,.25); letter-spacing:.16em; text-transform:uppercase; margin-bottom:5px; }
+    .bcount { font-size:1.5rem; font-weight:700; color:#4ADE80; text-shadow:0 0 14px rgba(74,222,128,.45); letter-spacing:-.02em; }
+    .bsub { font-size:.56rem; color:rgba(255,255,255,.20); letter-spacing:.08em; margin-top:2px; }
+
+    /* Threat feed */
+    .tfeed {
+      position:relative; background:rgba(3,8,17,.75);
+      border:1px solid rgba(46,134,255,.14); border-radius:var(--r8);
+      padding:8px 14px; margin-top:12px; overflow:hidden; height:34px;
+    }
+    .tfeed::before {
+      content:'LIVE'; position:absolute; left:10px; top:50%; transform:translateY(-50%);
+      font-family:'JetBrains Mono',monospace; font-size:.52rem; font-weight:700;
+      color:#FF4444; background:rgba(255,68,68,.10); border:1px solid rgba(255,68,68,.25);
+      padding:1px 5px; border-radius:2px; letter-spacing:.1em;
+    }
+    .titems {
+      position:absolute; top:50%; right:12px; left:56px;
+      transform:translateY(-50%); overflow:hidden; white-space:nowrap;
+    }
+    .titem {
+      font-family:'JetBrains Mono',monospace; font-size:.60rem;
+      color:rgba(255,255,255,.33); letter-spacing:.03em;
+      position:absolute; top:50%; transform:translateY(-50%);
+      animation: tscroll 11s linear infinite; right:-100%;
+    }
+    @keyframes tscroll {
+      0%{right:-100%;opacity:0} 4%{opacity:1} 50%{right:0%;opacity:1} 56%{opacity:0} 100%{right:0%;opacity:0}
+    }
+
+    /* Testimonial scan sweep */
+    .testi-card { overflow:hidden; }
+    .tscan { position:absolute; left:0; right:0; height:1px;
+      background:linear-gradient(90deg,transparent,rgba(46,134,255,.4),transparent);
+      top:-1px; opacity:0; }
+    .testi-card:hover .tscan { animation: tsweep .9s ease forwards; }
+    @keyframes tsweep { 0%{top:0;opacity:.7} 100%{top:100%;opacity:0} }
+
+    /* Featured pricing pulse */
+    .pricing-card.featured {
+      animation: fpulse 3s ease-in-out infinite;
+    }
+    @keyframes fpulse {
+      0%,100%{box-shadow:0 0 0 1px rgba(46,134,255,.30),0 4px 32px rgba(46,134,255,.18),0 2px 16px rgba(0,0,0,.40)}
+      50%{box-shadow:0 0 0 1px rgba(46,134,255,.65),0 4px 52px rgba(46,134,255,.30),0 2px 16px rgba(0,0,0,.40)}
+    }
+
+    /* CTA matrix canvas */
+    #ctamat { position:absolute; inset:0; z-index:0; opacity:.07; pointer-events:none; }
+    .cta-inner { position:relative; z-index:2; }
+
+    /* Footer boot log */
+    .flog {
+      font-family:'JetBrains Mono',monospace; font-size:.58rem;
+      color:rgba(46,134,255,.18); letter-spacing:.05em; line-height:1.9; margin-top:18px;
+    }
+    .fok   { color:rgba(74,222,128,.30); }
+    .fwarn { color:rgba(251,191,36,.30); }
+    .flog div { color: #4B9BFF; }
+
+    /* Cyber dividers */
+    .cdiv {
+      width:100%; height:1px;
+      background: linear-gradient(90deg,transparent 0%,rgba(46,134,255,.12) 20%,rgba(46,134,255,.28) 50%,rgba(46,134,255,.12) 80%,transparent 100%);
+      position:relative; overflow:visible;
+    }
+    .cdiv::before {
+      content:'◆'; position:absolute; left:50%; top:50%;
+      transform:translate(-50%,-50%);
+      font-size:.42rem; color:rgba(46,134,255,.40);
+      background:var(--bg-void); padding:0 10px;
+    }
+
+    /* Trust marquee */
+    .tbadge-outer {
+      overflow:hidden; flex:1;
+      mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent);
+    }
+    .ttrack {
+      display:flex; gap:10px; width:max-content;
+      animation: mq 22s linear infinite;
+    }
+    .ttrack:hover { animation-play-state:paused; }
+    @keyframes mq { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+    /* Nav active */
+    .nav-links a.active { color:white !important; }
+    .nav-links a.active::after { transform:scaleX(1) !important; }
+
+    /* Stat counters */
+    .counter { display:inline; }
+  </style>
+</head>
+<body>
+
+<!-- Overlays -->
+<div id="scanlines"></div>
+<div id="prog"></div>
+
+<!-- Side stream -->
+<div class="dstream" id="ds"></div>
+
+<!-- ── NAV ──────────────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <a href="intro.html" class="nav-logo">
+      <div class="shield">🛡</div>
+      Cyber <span>Cy-Curity</span>
+    </a>
+    <div class="nav-status">
+      <span class="nav-pulse"></span>
+      SYS_SECURE &nbsp;·&nbsp;
+      <span id="nclock">00:00:00</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#process">How It Works</a></li>
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#contact" class="nav-cta">Free Audit</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────── -->
+<section class="hero">
+  <canvas id="hmat"></canvas>
+  <div class="scan-line"></div>
+  <div class="hero-orb"></div>
+  <div class="hero-orb-2"></div>
+
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <span class="dot"></span>
+        <span id="etext"></span>
+      </div>
+      <h1 class="hero-headline">
+        Defending What<br>
+        <span class="glitch" data-t="Matters Most"><em>Matters Most</em></span>
+      </h1>
+      <p class="hero-sub">
+        Expert-led cybersecurity consulting that protects your data,
+        ensures compliance, and keeps you safe in an
+        ever-evolving threat landscape.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Get a Free Assessment ↗</a>
+        <a href="#services" class="btn-ghost">Our Services</a>
+      </div>
+    </div>
+
+    <div class="hero-terminal" style="position:relative">
+      <div class="hud htl"><svg viewBox="0 0 18 18" fill="none"><path d="M2 9L2 2L9 2" stroke="rgba(46,134,255,.65)" stroke-width="1.5"/></svg></div>
+      <div class="hud htr"><svg viewBox="0 0 18 18" fill="none"><path d="M2 9L2 2L9 2" stroke="rgba(46,134,255,.65)" stroke-width="1.5"/></svg></div>
+      <div class="hud hbl"><svg viewBox="0 0 18 18" fill="none"><path d="M2 9L2 2L9 2" stroke="rgba(46,134,255,.65)" stroke-width="1.5"/></svg></div>
+      <div class="hud hbr"><svg viewBox="0 0 18 18" fill="none"><path d="M2 9L2 2L9 2" stroke="rgba(46,134,255,.65)" stroke-width="1.5"/></svg></div>
+      <div class="terminal-bar">
+        <div class="terminal-dot" style="background:#FF5F57"></div>
+        <div class="terminal-dot" style="background:#FFC12C"></div>
+        <div class="terminal-dot" style="background:#2DCA50"></div>
+        <span class="terminal-title">root@cyc-sec:~$ security-scan.sh</span>
+      </div>
+      <div class="terminal-body" id="tbody">
+        <div class="tl"><span class="t-prompt">$ </span><span class="t-cmd">./run-security-audit --full --target=client</span></div>
+        <div class="tl t-out">&nbsp;</div>
+        <div class="tl t-out">[INIT] Cyber Cy-Curity scan engine v4.2.1</div>
+        <div class="tl t-out">[INIT] Target: client-network.local</div>
+        <div class="tl t-out">&nbsp;</div>
+        <div class="tl"><span class="t-ok">✓</span> <span class="t-cmd">Firewall configuration&nbsp;</span> <span class="t-ok">[PASS]</span></div>
+        <div class="tl"><span class="t-ok">✓</span> <span class="t-cmd">Endpoint protection&nbsp;&nbsp;&nbsp;</span> <span class="t-ok">[PASS]</span></div>
+        <div class="tl"><span class="t-warn">⚠</span> <span class="t-cmd">Patch status: 3 critical</span> <span class="t-warn">[ACTION]</span></div>
+        <div class="tl"><span class="t-ok">✓</span> <span class="t-cmd">MFA enforcement&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="t-ok">[PASS]</span></div>
+        <div class="tl"><span class="t-warn">⚠</span> <span class="t-cmd">SOC 2 gap: 2 controls&nbsp;</span> <span class="t-warn">[ACTION]</span></div>
+        <div class="tl"><span class="t-ok">✓</span> <span class="t-cmd">Encryption at rest&nbsp;&nbsp;&nbsp;</span> <span class="t-ok">[PASS]</span></div>
+        <div class="tl t-out">&nbsp;</div>
+        <div class="tl t-out">[DONE] Risk score: <span style="color:#FBD449;font-weight:700">68/100</span></div>
+        <div class="tl t-out">[INFO] Remediations: <span style="color:#4ADE80">+24 pts possible</span></div>
+        <div class="tl t-out">&nbsp;</div>
+        <div class="tl"><span class="t-prompt">$ </span><span class="t-cursor"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num"><span class="counter" data-target="20" data-suffix="%+">0%+</span></div>
+      <div class="stat-label">Average Net Margin</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><span class="counter" data-target="5" data-suffix="x">0x</span></div>
+      <div class="stat-label">Faster Incident Response</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><span class="counter" data-target="100" data-suffix="%">0%</span></div>
+      <div class="stat-label">NIST Framework Aligned</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" style="font-size:1.6rem">CISSP<span>/</span>OSCP</div>
+      <div class="stat-label">Certified Consultants</div>
+    </div>
+  </div>
+</section>
+
+<div class="cdiv"></div>
+
+<!-- ── TRUST BAR ─────────────────────────────────── -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <span class="trust-label">// CLEARANCE //</span>
+    <div class="tbadge-outer">
+      <div class="ttrack" id="ttrack">
+        <span class="trust-badge">NIST</span>
+        <span class="trust-badge">HIPAA</span>
+        <span class="trust-badge">SOC 2</span>
+        <span class="trust-badge">PCI DSS</span>
+        <span class="trust-badge">CISSP</span>
+        <span class="trust-badge">OSCP</span>
+        <span class="trust-badge">CompTIA Sec+</span>
+        <span class="trust-badge">ISO 27001</span>
+        <span class="trust-badge">NIST</span>
+        <span class="trust-badge">HIPAA</span>
+        <span class="trust-badge">SOC 2</span>
+        <span class="trust-badge">PCI DSS</span>
+        <span class="trust-badge">CISSP</span>
+        <span class="trust-badge">OSCP</span>
+        <span class="trust-badge">CompTIA Sec+</span>
+        <span class="trust-badge">ISO 27001</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cdiv"></div>
+
+<!-- ── SERVICES ──────────────────────────────────── -->
+<section class="services section" id="services">
+  <canvas id="hxcv"></canvas>
+  <div class="container">
+    <div class="section-label">// MODULE_LOAD: Services</div>
+    <h2 class="section-title reveal">Comprehensive Security<br>for Your Business</h2>
+    <p class="section-sub reveal reveal-delay-1">From penetration testing to compliance audits, we deliver end-to-end cybersecurity solutions tailored to your risk profile.</p>
+    <div class="services-grid">
+      <div class="service-card reveal reveal-delay-1">
+        <span class="service-num">01</span>
+        <div class="service-icon">🔍</div>
+        <div class="service-title">Penetration Testing</div>
+        <p class="service-desc">Simulated real-world attacks to expose vulnerabilities before bad actors find them. Red team operations, black-box, and gray-box assessments.</p>
+        <div class="service-tags"><span class="tag">OSCP</span><span class="tag">Red Team</span><span class="tag">Zero-Day</span></div>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <span class="service-num">02</span>
+        <div class="service-icon">📋</div>
+        <div class="service-title">Compliance &amp; Audit</div>
+        <p class="service-desc">Achieve and maintain HIPAA, SOC 2, PCI DSS, and NIST compliance. Gap analysis, remediation planning, and certification support.</p>
+        <div class="service-tags"><span class="tag">HIPAA</span><span class="tag">SOC 2</span><span class="tag">PCI DSS</span></div>
+      </div>
+      <div class="service-card reveal reveal-delay-3">
+        <span class="service-num">03</span>
+        <div class="service-icon">🚨</div>
+        <div class="service-title">Incident Response</div>
+        <p class="service-desc">24/7 rapid response to breaches, ransomware, and security incidents. Digital forensics, containment, and full recovery planning.</p>
+        <div class="service-tags"><span class="tag">24/7</span><span class="tag">Forensics</span><span class="tag">Recovery</span></div>
+      </div>
+      <div class="service-card reveal reveal-delay-1">
+        <span class="service-num">04</span>
+        <div class="service-icon">🧠</div>
+        <div class="service-title">Risk Assessment</div>
+        <p class="service-desc">Comprehensive security risk assessments using the NIST framework. Threat modeling, vulnerability management, and prioritized remediation.</p>
+        <div class="service-tags"><span class="tag">NIST</span><span class="tag">Threat Model</span></div>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <span class="service-num">05</span>
+        <div class="service-icon">💀</div>
+        <div class="service-title">Hacker Mindset Defense</div>
+        <p class="service-desc">We think like the adversary. By adopting offensive hacker techniques and tools, we expose the gaps your standard defenses miss before real attackers do.</p>
+        <div class="service-tags"><span class="tag">Offensive Sec</span><span class="tag">CTF</span><span class="tag">Exploit Dev</span></div>
+      </div>
+      <div class="service-card reveal reveal-delay-3">
+        <span class="service-num">06</span>
+        <div class="service-icon">🎓</div>
+        <div class="service-title">Security Awareness Training</div>
+        <p class="service-desc">Transform your team into a human firewall. Phishing simulations, security workshops, and ongoing awareness programs.</p>
+        <div class="service-tags"><span class="tag">Phishing Sim</span><span class="tag">Workshops</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cdiv"></div>
+
+<!-- ── PROCESS ───────────────────────────────────── -->
+<section class="process section" id="process">
+  <div class="container">
+    <div class="section-label">// EXEC_PROTOCOL: Engagement Flow</div>
+    <h2 class="section-title reveal" style="text-align:center;max-width:100%">From Assessment to Protection</h2>
+    <p class="section-sub reveal reveal-delay-1" style="text-align:center;max-width:580px;margin:0 auto 64px">
+      A structured, transparent methodology that delivers measurable security improvements at every step.
+    </p>
+    <div class="process-grid" style="position:relative">
+      <div class="pcon"><div class="pline"></div><div class="pdot"></div></div>
+      <div class="process-step reveal reveal-delay-1">
+        <div class="step-bubble">01</div>
+        <div class="step-title">Discovery</div>
+        <p class="step-desc">We assess your current security posture, identify assets, and map your threat landscape.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div class="step-bubble">02</div>
+        <div class="step-title">Analysis</div>
+        <p class="step-desc">Deep-dive vulnerability analysis, gap assessments against compliance frameworks.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div class="step-bubble">03</div>
+        <div class="step-title">Remediation</div>
+        <p class="step-desc">Prioritized action plans and hands-on implementation of security controls.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-4">
+        <div class="step-bubble">04</div>
+        <div class="step-title">Monitor</div>
+        <p class="step-desc">Ongoing monitoring, quarterly reviews, and continuous posture improvement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cdiv"></div>
+
+<!-- ── WHY US ────────────────────────────────────── -->
+<section class="why section" id="why">
+  <div class="container">
+    <div class="why-grid">
+      <div class="why-left">
+        <div class="section-label">// ACCESS_LOG: Why Us</div>
+        <h2 class="section-title reveal">Built by Experts.<br>Trusted by Business.</h2>
+        <p class="section-sub reveal reveal-delay-1">We bridge the gap between cyber specialization and your personal life to give you more time to focus on you.</p>
+        <div class="why-items">
+          <div class="why-item reveal reveal-delay-1">
+            <div class="why-check">✓</div>
+            <div>
+              <div class="why-item-title">CISSP &amp; OSCP Certified Team</div>
+              <div class="why-item-desc">Industry's gold-standard certifications ensuring you get the highest caliber expertise on every engagement.</div>
+            </div>
+          </div>
+          <div class="why-item reveal reveal-delay-2">
+            <div class="why-check">✓</div>
+            <div>
+              <div class="why-item-title">Jargon-Free Communication</div>
+              <div class="why-item-desc">We translate complex findings into clear business language with actionable priorities.</div>
+            </div>
+          </div>
+          <div class="why-item reveal reveal-delay-3">
+            <div class="why-check">✓</div>
+            <div>
+              <div class="why-item-title">Hacker Mindset Philosophy</div>
+              <div class="why-item-desc">We think offensively first. By understanding exactly how attackers operate, we build defenses that hold up against real-world exploitation — not just checkbox compliance.</div>
+            </div>
+          </div>
+          <div class="why-item reveal reveal-delay-4">
+            <div class="why-check">✓</div>
+            <div>
+              <div class="why-item-title">Tailored, Not Templated</div>
+              <div class="why-item-desc">Every security strategy is built around your specific business, industry, and risk profile.</div>
+            </div>
+          </div>
+        </div>
+        <!-- Breach counter -->
+        <div class="breach reveal reveal-delay-5">
+          <div class="blabel">// GLOBAL BREACH COUNTER — TODAY</div>
+          <div class="bcount" id="bcount">142,800</div>
+          <div class="bsub">RECORDS COMPROMISED SINCE MIDNIGHT (EST)</div>
+        </div>
+        <!-- Threat feed -->
+        <div class="tfeed">
+          <div class="titems"><span class="titem" id="titem">Loading threat intelligence...</span></div>
+        </div>
+      </div>
+
+      <div class="why-right reveal reveal-delay-2">
+        <div class="compliance-card">
+          <span class="compliance-badge">HIPAA</span>
+          <div class="compliance-name">Healthcare Compliance</div>
+          <p class="compliance-desc">Full HIPAA Security Rule assessments, gap remediation, and ongoing compliance management.</p>
+        </div>
+        <div class="compliance-card">
+          <span class="compliance-badge">SOC 2</span>
+          <div class="compliance-name">Trust &amp; Availability</div>
+          <p class="compliance-desc">Type I and Type II SOC 2 readiness assessments, control implementation, and audit preparation.</p>
+        </div>
+        <div class="compliance-card">
+          <span class="compliance-badge">PCI DSS</span>
+          <div class="compliance-name">Payment Security</div>
+          <p class="compliance-desc">Cardholder data protection, network segmentation, and PCI DSS Level 1–4 compliance programs.</p>
+        </div>
+        <div class="compliance-card">
+          <span class="compliance-badge">NIST CSF</span>
+          <div class="compliance-name">Framework Alignment</div>
+          <p class="compliance-desc">NIST Cybersecurity Framework — Identify, Protect, Detect, Respond, and Recover.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cdiv"></div>
+
+<!-- ── TESTIMONIALS ───────────────────────────────── -->
+<section class="testimonials section">
+  <div class="container">
+    <div class="section-label">// VERIFIED_INTEL: Client Results</div>
+    <h2 class="section-title reveal">Trusted by Growing Businesses</h2>
+    <p class="section-sub reveal reveal-delay-1">Real outcomes from organizations that chose Cyber Cy-Curity.</p>
+    <div class="testi-grid">
+      <div class="testi-card reveal reveal-delay-1">
+        <div class="tscan"></div>
+        <span class="testi-quote">"</span>
+        <p class="testi-text">Cyber Cy-Curity helped us achieve SOC 2 Type II in record time. Their team made an intimidating process feel manageable, and communication was exceptional throughout.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">JR</div>
+          <div><div class="testi-name">James R.</div><div class="testi-role">CTO, FinTech Startup</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="tscan"></div>
+        <span class="testi-quote">"</span>
+        <p class="testi-text">After a near-miss ransomware incident, they not only remediated the issue but completely overhauled our security posture. Worth every penny.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">ML</div>
+          <div><div class="testi-name">Maria L.</div><div class="testi-role">Director of IT, Healthcare Group</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-3">
+        <div class="tscan"></div>
+        <span class="testi-quote">"</span>
+        <p class="testi-text">The penetration test findings were eye-opening. Cyrus delivered a clear, prioritized report that our board actually understood. We fixed 80% of critical findings in 30 days.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">DP</div>
+          <div><div class="testi-name">David P.</div><div class="testi-role">CISO, Regional Law Firm</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cdiv"></div>
+
+<!-- ── PRICING ───────────────────────────────────── -->
+<section class="pricing section" id="pricing">
+  <div class="container">
+    <div class="section-label" style="justify-content:center">// ACCESS_TIERS: Plans</div>
+    <h2 class="section-title reveal" style="text-align:center;max-width:100%">Simple, Scalable Plans</h2>
+    <p class="section-sub reveal reveal-delay-1" style="text-align:center;max-width:520px;margin:0 auto 56px">No hidden fees. Open for negotiaons. Choose the level of protection that fits your business today.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card reveal reveal-delay-1">
+        <div class="pricing-tier">// TIER_01 :: Starter</div>
+        <div class="pricing-price">$850<sub>/mo</sub></div>
+        <p class="pricing-desc">For small businesses establishing their security baseline.</p>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li>Monthly security risk assessment</li>
+          <li>Vulnerability scanning &amp; reporting</li>
+          <li>NIST framework gap analysis</li>
+          <li>Security awareness training (up to 25 users)</li>
+          <li>Email &amp; phone support</li>
+        </ul>
+        <button class="btn-plan">Get Started</button>
+      </div>
+      <div class="pricing-card featured reveal reveal-delay-2">
+        <div class="featured-tag">◆ MOST POPULAR ◆</div>
+        <div class="pricing-tier">// TIER_02 :: Professional</div>
+        <div class="pricing-price">$2500<sub>/mo</sub></div>
+        <p class="pricing-desc">For growing companies requiring compliance management.</p>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li>Everything in Starter</li>
+          <li>Full penetration testing (quarterly)</li>
+          <li>SOC 2 or HIPAA compliance program</li>
+          <li>Incident response retainer (24/7)</li>
+          <li>Dedicated account manager</li>
+          <li>Monthly security briefings</li>
+          <li>Unlimited users — awareness training</li>
+        </ul>
+        <button class="btn-plan featured">Get Started</button>
+      </div>
+      <div class="pricing-card reveal reveal-delay-3">
+        <div class="pricing-tier">// TIER_03 :: Enterprise</div>
+        <div class="pricing-price">Custom</div>
+        <p class="pricing-desc">For organizations with complex, multi-framework requirements.</p>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li>Everything in Professional</li>
+          <li>Red team / advanced adversary sim</li>
+          <li>Multi-framework compliance</li>
+          <li>On-site engagements available</li>
+          <li>vCISO advisory services</li>
+          <li>Board-level reporting &amp; presentations</li>
+        </ul>
+        <button class="btn-plan">Contact Us</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cdiv"></div>
+
+<!-- ── CTA ───────────────────────────────────────── -->
+<section class="cta-banner" id="contact">
+  <canvas id="ctamat"></canvas>
+  <div class="cta-inner">
+    <div>
+      <h2 class="cta-heading">Ready to Secure<br><em>Your Business?</em></h2>
+      <p class="cta-sub">// Get a free 30-minute security assessment. No strings attached.</p>
+    </div>
+    <div class="cta-form">
+      <input type="email" class="cta-input" placeholder="user@domain.com" />
+      <a href="#" class="btn-primary">Book Free Audit ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo"><div class="shield">🛡</div>Cyber <span>Cy-Curity</span></a>
+      <p class="footer-tagline">Expert cybersecurity consulting protecting businesses from evolving threats. CISSP &amp; OSCP certified. Based in the United States.</p>
+      <div class="footer-social">
+        <a class="social-btn" href="#" data-label="LinkedIn">in</a>
+        <a class="social-btn" href="#" data-label="Twitter/X">𝕏</a>
+        <a class="social-btn" href="#" data-label="Instagram">🅾</a>
+        <a class="social-btn" href="#" data-label="Facebook">ⓕ</a>
+      </div>
+      <div class="flog">
+        <div><span class="fok">[OK]&nbsp;&nbsp;</span> firewall.service — active (running)</div>
+        <div><span class="fok">[OK]&nbsp;&nbsp;</span> ids.service — active (running)</div>
+        <div><span class="fwarn">[WARN]</span> patch-manager — 3 pending updates</div>
+        <div><span class="fok">[OK]&nbsp;&nbsp;</span> ssl-monitor — all certs valid</div>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Services</div>
+      <ul class="footer-links">
+        <li><a href="#">Penetration Testing</a></li>
+        <li><a href="#">Compliance Audit</a></li>
+        <li><a href="#">Incident Response</a></li>
+        <li><a href="#">Risk Assessment</a></li>
+        <li><a href="#">Hacker Mindset Defense</a></li>
+        <li><a href="#">Security Training</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Compliance</div>
+      <ul class="footer-links">
+        <li><a href="#">HIPAA</a></li>
+        <li><a href="#">SOC 2</a></li>
+        <li><a href="#">PCI DSS</a></li>
+        <li><a href="#">NIST Framework</a></li>
+        <li><a href="#">ISO 27001</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="https://www.linkedin.com/in/cyrusbrooks/" target="_blank" rel="noopener noreferrer">About Cyrus Brooks</a>
+        </li>
+        <li><a href="#">Blog &amp; Insights</a></li>
+        <li><a href="#">Case Studies</a></li>
+        <li><a href="https://www.credly.com/users/cyrus-brooks.a77d201d" target="_blank" rel="noopener noreferrer">Certifications</a></li>
+        <li><a href="https://linktr.ee/cyrus39" target="_blank" rel="noopener noreferrer">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Cyber Cy-Curity. Cyrus Brooks. All rights reserved.</span>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Security Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── CLOCK ──────────────────────────── */
+const cl=document.getElementById('nclock');
+setInterval(()=>{const n=new Date();cl.textContent=[n.getHours(),n.getMinutes(),n.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');},1000);
+
+/* ── SCROLL PROGRESS ────────────────── */
+const pb=document.getElementById('prog');
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement;
+  pb.style.width=(s.scrollTop/(s.scrollHeight-s.clientHeight)*100)+'%';
+});
+
+/* ── REVEAL ─────────────────────────── */
+const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.10});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ── ACTIVE NAV ─────────────────────── */
+const secs=document.querySelectorAll('section[id]'),nls=document.querySelectorAll('.nav-links a');
+new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nls.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));}),{threshold:.4}).observe;
+secs.forEach(s=>new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)nls.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));}),{threshold:.4}).observe(s));
+
+/* ── MATRIX CANVAS ──────────────────── */
+function mkMatrix(id){
+  const cv=document.getElementById(id);if(!cv)return;
+  const cx=cv.getContext('2d');let cols,drops;
+  function rsz(){cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;cols=Math.floor(cv.width/15);drops=Array(cols).fill(0).map(()=>Math.random()*-50);}
+  rsz();new ResizeObserver(rsz).observe(cv);
+  setInterval(()=>{cx.fillStyle='rgba(0,0,0,.07)';cx.fillRect(0,0,cv.width,cv.height);
+    for(let i=0;i<drops.length;i++){
+      cx.fillStyle=`rgba(46,134,255,${.25+Math.random()*.55})`;
+      cx.font='11px "JetBrains Mono",monospace';
+      cx.fillText(Math.random()>.5?'1':'0',i*15,drops[i]*15);
+      if(drops[i]*15>cv.height&&Math.random()>.97)drops[i]=0;
+      drops[i]+=.45+Math.random()*.2;
+    }},48);}
+mkMatrix('hmat'); mkMatrix('ctamat');
+
+/* ── HEX GRID ───────────────────────── */
+(function(){
+  const cv=document.getElementById('hxcv');if(!cv)return;
+  const cx=cv.getContext('2d');
+  function draw(){
+    cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;
+    const s=26,h=s*Math.sqrt(3);
+    cx.strokeStyle='rgba(46,134,255,1)';cx.lineWidth=.7;
+    for(let r=-1;r<cv.height/h+1;r++)for(let c=-1;c<cv.width/(s*3)+1;c++){
+      const x=c*s*3+(r%2===0?0:s*1.5),y=r*h;
+      cx.beginPath();
+      for(let i=0;i<6;i++){const a=(Math.PI/180)*(60*i-30);i===0?cx.moveTo(x+s*Math.cos(a),y+s*Math.sin(a)):cx.lineTo(x+s*Math.cos(a),y+s*Math.sin(a));}
+      cx.closePath();cx.stroke();}
+  }
+  draw();new ResizeObserver(draw).observe(cv);
+})();
+
+/* ── EYEBROW TYPEWRITER ─────────────── */
+(function(){
+  const el=document.getElementById('etext');const txt='Cybersecurity Consulting';let i=0;
+  const iv=setInterval(()=>{el.textContent=txt.slice(0,++i);if(i>=txt.length){clearInterval(iv);el.style.borderRight='none';}},55);
+})();
+
+/* ── TERMINAL LINES ─────────────────── */
+document.querySelectorAll('#tbody .tl').forEach((l,i)=>setTimeout(()=>l.classList.add('on'),400+i*170));
+
+/* ── COUNTERS ───────────────────────── */
+new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  const el=e.target,tgt=+el.dataset.target,sfx=el.dataset.suffix||'';
+  let v=0;const iv=setInterval(()=>{v=Math.min(v+tgt/80,tgt);el.textContent=Math.floor(v)+sfx;if(v>=tgt)clearInterval(iv);},22);
+  e.target._obs.unobserve(el);
+}),{threshold:.5}).observe;
+document.querySelectorAll('.counter').forEach(el=>{
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const tgt=+el.dataset.target,sfx=el.dataset.suffix||'';
+    let v=0;const iv=setInterval(()=>{v=Math.min(v+tgt/80,tgt);el.textContent=Math.floor(v)+sfx;if(v>=tgt)clearInterval(iv);},22);
+    obs.unobserve(el);
+  }),{threshold:.5});
+  obs.observe(el);
+});
+
+/* ── BREACH COUNTER ─────────────────── */
+(function(){
+  const el=document.getElementById('bcount');let val=142800;
+  setInterval(()=>{val+=Math.floor(Math.random()*350+60);el.textContent=val.toLocaleString('en-US');},900);
+})();
+
+/* ── THREAT FEED ────────────────────── */
+(function(){
+  const threats=['⚠ SQL injection attempt blocked — 192.168.4.22','⚠ Brute-force SSH detected — origin: RU-AS12345','⚠ CVE-2024-3891 exploit scan — 45.83.91.12','⚠ Suspicious lateral movement — internal subnet','⚠ Phishing domain registered — client-alert.net','⚠ Log4Shell probe — 198.51.100.7','⚠ Credential stuffing — 847 attempts/min','⚠ Ransomware IOC match — hash: a3f9e2...'];
+  const el=document.getElementById('titem');let i=0;
+  function next(){el.style.animation='none';void el.offsetWidth;el.textContent=threats[i%threats.length];el.style.animation='tscroll 11s linear forwards';i++;setTimeout(next,11000);}
+  setTimeout(next,1200);
+})();
+
+/* ── SIDE DATA STREAM ───────────────── */
+(function(){
+  const el=document.getElementById('ds');const chars='01ABCDEF0123456789';
+  for(let i=0;i<20;i++){const d=document.createElement('span');d.textContent=chars[Math.floor(Math.random()*chars.length)];el.appendChild(d);}
+  setInterval(()=>el.querySelectorAll('span').forEach(c=>{if(Math.random()<.12)c.textContent=chars[Math.floor(Math.random()*chars.length)];}),350);
+})();
+
+/* ── SERVICE NUM FLICKER ────────────── */
+setInterval(()=>{
+  const cards=document.querySelectorAll('.service-card');
+  const c=cards[Math.floor(Math.random()*cards.length)];
+  const n=c&&c.querySelector('.service-num');
+  if(n){n.style.cssText='color:rgba(46,134,255,.6);text-shadow:0 0 8px rgba(46,134,255,.5)';setTimeout(()=>n.style.cssText='',130);}
+},2200);
+</script>
+</body>
+</html>
